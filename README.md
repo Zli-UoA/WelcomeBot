@@ -1,8 +1,8 @@
-# SNSPostman
+# WelcomeBot
 
 ## Discription
 
-Slackの投稿にメンションをつけるとTwitterに投稿してくれるBotです
+Slackに新規に参加したユーザーを歓迎してくれるBot
 
 ## How to start
 
@@ -19,24 +19,11 @@ CloudRun等にDeployしてください.
 
 ## Environment Valiables
 
-- SLACK_SIGNING_SECRET : Slack のSigning Secret
-- SLACK_BOT_TOKEN : Slack の bot token
-- SLACK_OAUTH_TOKEN : Slack の OAuth Token
-- SLACK_ENABLE_CHANNEL : 有効にするチャンネル
-- IFTTT_KEY : IFTTT の Webhook key
-- IMGUR_CLIENT_ID : IMGUR の ClientID
+- SLACK_SIGNING_SECRET : SigningSecret
+- SLACK_TOKEN : BotToken
+- POST_CHANNEL_ID : ChannelID
 
 ## How to use
 
-環境変数で有効にしたチャンネルで投稿にメンションをつけて 「投稿して」と投稿する
-
-- 有効なフレーズ
-  - 投稿
-  - とうこう
-  - Tweet
-  - tweet
-  - 呟く
-  - つぶやく
-  - 呟いて
-  - つぶやい
+ワークスペースに新規で参加すると `POST_CHANNEL_ID` で指定したチャンネルにメッセージが投稿されます。
 
