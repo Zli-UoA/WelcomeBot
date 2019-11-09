@@ -22,6 +22,7 @@ CloudRun等にDeployしてください.
 - SLACK_SIGNING_SECRET : SigningSecret
 - SLACK_TOKEN : BotToken
 - POST_CHANNEL_ID : ChannelID
+- MESSAGE_TEMPLATE : MessageTemplate (`username` の部分が新規参加へのメンションになります)
 
 ## How to use
 
