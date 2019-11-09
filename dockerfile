@@ -1,6 +1,9 @@
-FROM node:10
-
+FROM node:10 as builder
 WORKDIR /node/src/app
-ADD ./dist/main.js /node/src/app
+ADD . /node/src/app
+RUN npm i && npm run build
 
+FROM node:10
+WORKDIR /node/src/app
+COPY --from=builder /node/src/app/dist/main.js /node/src/app
 CMD [ "node", "main.js" ]
