@@ -9,6 +9,11 @@ const app = new App({
 });
 
 const postChannelID = process.env.POST_CHANNEL_ID;
+const messageTemplate = process.env.MESSAGE_TEMPLATE;
+
+const message = (userID: string): string => 
+  messageTemplate
+    .replace('username', `<@${ userID }>`);
 
 app.event('team_join', async ({ event, context }) => {
   try {
@@ -17,7 +22,7 @@ app.event('team_join', async ({ event, context }) => {
     const result = await app.client.chat.postMessage({
       token: context.botToken,
       channel: postChannelID,
-      text: `<@${ userID }>がSlackに参加しました! ようこそ Zliへ!`
+      text: message(userID)
     });
 
     console.log(result);
@@ -28,7 +33,7 @@ app.event('team_join', async ({ event, context }) => {
 
 (async () => {
   try {
-    await app.start(process.env.PORT || 3000)
+    await app.start(process.env.PORT || 3000);
     console.log("⚡ Running Slack Bot with bolts.");
   } catch(e) {
     console.error(e);
