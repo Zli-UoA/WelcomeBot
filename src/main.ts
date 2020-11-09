@@ -15,6 +15,26 @@ const emojiNoticeChannelID = process.env.EMOJI_NOTICE_CHANNEL_ID;
 const message = (userID: string): string =>
   messageTemplate.replace('username', `<@${userID}>`);
 
+app.command('/zli', async ({ command, context, ack }) => {
+  ack();
+  switch (command.text) {
+    case 'test:team_join':
+      try {
+        const { user_id } = command;
+
+        const result = await app.client.chat.postMessage({
+          token: context.botToken,
+          channel: command.channel_id,
+          text: message(user_id),
+        });
+
+        console.log(result);
+      } catch (e) {
+        console.error(e);
+      }
+  }
+});
+
 app.event('team_join', async ({ event, context }) => {
   try {
     const { id: userID } = event.user as { id: string };
