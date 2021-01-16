@@ -37,7 +37,8 @@ CloudRun 等に Deploy してください.
 - SLACK_SIGNING_SECRET : SigningSecret
 - SLACK_TOKEN : BotToken
 - POST_CHANNEL_ID : ChannelID
-- MESSAGE_TEMPLATE : MessageTemplate (`username` の部分が新規参加へのメンションになります)
+- MESSAGE_TEMPLATE_FILE : MessageTemplateのファイル名
+  - 読み込むファイルの中身 : MessageTemplate (`username` の部分が新規参加へのメンションになります)
 - EMOJI_NOTICE_CHANNEL_ID : emoji の追加通知を送りたいチャンネル
 
 ## How to use

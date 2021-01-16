@@ -1,5 +1,6 @@
 import { App } from '@slack/bolt';
 import * as Env from 'dotenv';
+import * as fs from 'fs';
 
 if (process.env.NODE_ENV === 'dev') Env.config();
 
@@ -9,7 +10,8 @@ const app = new App({
 });
 
 const postChannelID = process.env.POST_CHANNEL_ID;
-const messageTemplate = process.env.MESSAGE_TEMPLATE;
+const messageTemplateFile = process.env.MESSAGE_TEMPLATE_FILE;
+const messageTemplate = fs.readFileSync(messageTemplateFile, "UTF-8");
 const emojiNoticeChannelID = process.env.EMOJI_NOTICE_CHANNEL_ID;
 
 const message = (userID: string): string =>
