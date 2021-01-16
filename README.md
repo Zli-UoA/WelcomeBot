@@ -23,6 +23,7 @@ A. slack の無料プランではアプリを入れれる数が制限されて�
 
 - `npm install`
 - `.env` ファイルに下記の環境変数を記入
+- `template.txt` に新規参加者へのメッセージを記入(`username` の部分が新規参加へのメンションになります)
 - `npm run dev` をして `node dist/main.js` を実行
 
 ### Production
@@ -37,8 +38,6 @@ CloudRun 等に Deploy してください.
 - SLACK_SIGNING_SECRET : SigningSecret
 - SLACK_TOKEN : BotToken
 - POST_CHANNEL_ID : ChannelID
-- MESSAGE_TEMPLATE_FILE : MessageTemplateのファイル名
-  - 読み込むファイルの中身 : MessageTemplate (`username` の部分が新規参加へのメンションになります)
 - EMOJI_NOTICE_CHANNEL_ID : emoji の追加通知を送りたいチャンネル
 
 ## How to use
