@@ -11,7 +11,7 @@ const app = new App({
 
 const postChannelID = process.env.POST_CHANNEL_ID;
 const messageTemplateFile = process.env.MESSAGE_TEMPLATE_FILE;
-const messageTemplate = fs.readFileSync(messageTemplateFile, "UTF-8");
+const messageTemplate = fs.readFileSync(messageTemplateFile, "utf-8");
 const emojiNoticeChannelID = process.env.EMOJI_NOTICE_CHANNEL_ID;
 
 const message = (userID: string): string =>
