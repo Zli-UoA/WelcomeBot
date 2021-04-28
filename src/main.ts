@@ -23,6 +23,12 @@ app.command('/zli', async ({ command, context, ack }) => {
       try {
         const { user_id } = command;
 
+        const res = await app.client.conversations.open({
+          users: user_id
+        })
+
+        console.log(res)
+
         const result = await app.client.chat.postMessage({
           token: context.botToken,
           channel: command.channel_id,
