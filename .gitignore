@@ -93,4 +93,5 @@ typings/
 .dynamodb/
 dist/
 
-template.txt
+dm_template.txt
+join_log.txt

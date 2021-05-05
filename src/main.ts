@@ -10,11 +10,14 @@ const app = new App({
 });
 
 const postChannelID = process.env.POST_CHANNEL_ID;
-const messageTemplate = fs.readFileSync("template.txt", "utf-8");
+const dmMessageTemplate = fs.readFileSync("dm_template.txt", "utf-8");
+const joinLogTemplate = fs.readFileSync("join_log.txt", "utf-8");
 const emojiNoticeChannelID = process.env.EMOJI_NOTICE_CHANNEL_ID;
 
-const message = (userID: string): string =>
-  messageTemplate.replace('username', `<@${userID}>`);
+const dmMessage = (userID: string): string =>
+  dmMessageTemplate.replace('username', `<@${userID}>`);
+const joinLog = (userID: string): string =>
+    joinLogTemplate.replace('username', `<@${userID}>`);
 
 app.command('/zli', async ({ command, context, ack }) => {
   ack();
@@ -23,13 +26,21 @@ app.command('/zli', async ({ command, context, ack }) => {
       try {
         const { user_id } = command;
 
-        const result = await app.client.chat.postMessage({
+        const res = await app.client.conversations.open({
+          token: context.botToken,
+          users: user_id
+        })
+
+        await app.client.chat.postMessage({
+          token: context.botToken,
+          channel: res.channel.id,
+          text: dmMessage(user_id),
+        });
+        await app.client.chat.postMessage({
           token: context.botToken,
           channel: command.channel_id,
-          text: message(user_id),
-        });
-
-        console.log(result);
+          text: joinLog(user_id)
+        })
       } catch (e) {
         console.error(e);
       }
@@ -38,15 +49,23 @@ app.command('/zli', async ({ command, context, ack }) => {
 
 app.event('team_join', async ({ event, context }) => {
   try {
-    const { id: userID } = event.user as { id: string };
+    const { id: user_id } = event.user as { id: string };
 
-    const result = await app.client.chat.postMessage({
+    const res = await app.client.conversations.open({
+      token: context.botToken,
+      users: user_id
+    })
+
+    await app.client.chat.postMessage({
+      token: context.botToken,
+      channel: res.channel.id,
+      text: dmMessage(user_id),
+    });
+    await app.client.chat.postMessage({
       token: context.botToken,
       channel: postChannelID,
-      text: message(userID),
-    });
-
-    console.log(result);
+      text: joinLog(user_id)
+    })
   } catch (e) {
     console.error(e);
   }
@@ -76,7 +95,7 @@ app.event('emoji_changed', async ({ event, context }) => {
 
 (async () => {
   try {
-    await app.start(process.env.PORT || 3000);
+    await app.start(Number(process.env.PORT) || 3000);
     console.log('⚡ Running Slack Bot with bolts.');
   } catch (e) {
     console.error(e);
