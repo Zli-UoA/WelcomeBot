@@ -23,8 +23,9 @@ app.command('/zli', async ({ command, context, ack }) => {
       try {
         const { user_id } = command;
 
-        const res = await app.client.conversations.open({
-          users: user_id
+        const res = await app.client.im.open({
+          token: context.botToken,
+          user: user_id
         })
 
         console.log(res)
@@ -82,7 +83,7 @@ app.event('emoji_changed', async ({ event, context }) => {
 
 (async () => {
   try {
-    await app.start(process.env.PORT || 3000);
+    await app.start(Number(process.env.PORT) || 3000);
     console.log('⚡ Running Slack Bot with bolts.');
   } catch (e) {
     console.error(e);
