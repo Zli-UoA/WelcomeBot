@@ -8,6 +8,7 @@ Zli の色々をしてくれる bot
 
 - 新規 slack 参加者の通知 (#general)
 - emoji の追加通知 (#notice_emoji)
+- 新規チャンネル作成通知(#notice_channel_created)
 
 ### Q. なんで 1 個の bot が色々やってるの？
 
@@ -39,6 +40,7 @@ CloudRun 等に Deploy してください.
 - SLACK_TOKEN : BotToken
 - POST_CHANNEL_ID : ChannelID
 - EMOJI_NOTICE_CHANNEL_ID : emoji の追加通知を送りたいチャンネル
+- CHANNEL_CREATED_NOTICE_CHANNEL_ID: チャンネルの作成通知を送りたいチャンネルのID
 
 ## How to use
 

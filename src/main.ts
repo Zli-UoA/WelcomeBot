@@ -13,6 +13,7 @@ const postChannelID = process.env.POST_CHANNEL_ID;
 const dmMessageTemplate = fs.readFileSync("dm_template.txt", "utf-8");
 const joinLogTemplate = fs.readFileSync("join_log.txt", "utf-8");
 const emojiNoticeChannelID = process.env.EMOJI_NOTICE_CHANNEL_ID;
+const channelCreateNoticeChannelId = process.env.CHANNEL_CREATED_NOTICE_CHANNEL_ID;
 
 const dmMessage = (userID: string): string =>
   dmMessageTemplate.replace('username', `<@${userID}>`);
@@ -89,6 +90,20 @@ app.event('emoji_changed', async ({ event, context }) => {
         return;
     }
   } catch (e) {
+    console.error(e);
+  }
+});
+
+app.event('channel_created', async({event})=>{
+  try{
+    const { channel } = event;
+    const text = `<@${channel.creator}>が<#${channel.id}>を作りましたよ`;
+    await app.client.chat.postMessage({
+      channel: channelCreateNoticeChannelId,
+      text: text
+    });
+  }
+  catch (e) {
     console.error(e);
   }
 });
