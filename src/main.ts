@@ -13,6 +13,7 @@ const postChannelID = process.env.POST_CHANNEL_ID;
 const dmMessageTemplate = fs.readFileSync("dm_template.txt", "utf-8");
 const joinLogTemplate = fs.readFileSync("join_log.txt", "utf-8");
 const emojiNoticeChannelID = process.env.EMOJI_NOTICE_CHANNEL_ID;
+const channelCreatedNoticeChannelID = process.env.CHANNEL_CREATED_NOTICE_CHANNEL_ID;
 
 const dmMessage = (userID: string): string =>
   dmMessageTemplate.replace('username', `<@${userID}>`);
@@ -24,23 +25,24 @@ app.command('/zli', async ({ command, context, ack }) => {
   switch (command.text) {
     case 'test:team_join':
       try {
-        const { user_id } = command;
-
+        const { user_id, is_restricted } = command;
+console.log(`id: ${user_id}  isGuest: ${is_restricted}`);
         const res = await app.client.conversations.open({
           token: context.botToken,
           users: user_id
         })
-
-        await app.client.chat.postMessage({
-          token: context.botToken,
-          channel: res.channel.id,
+	if(is_restricted === false){
+          await app.client.chat.postMessage({
+            token: context.botToken,
+            channel: command.channel_id,
           text: dmMessage(user_id),
-        });
+          })
+	}
         await app.client.chat.postMessage({
           token: context.botToken,
           channel: command.channel_id,
-          text: joinLog(user_id)
-        })
+            text: joinLog(user_id)
+        });
       } catch (e) {
         console.error(e);
       }
@@ -49,23 +51,28 @@ app.command('/zli', async ({ command, context, ack }) => {
 
 app.event('team_join', async ({ event, context }) => {
   try {
-    const { id: user_id } = event.user as { id: string };
+    const { id: user_id, is_restricted: isGuest } = event.user as { id: string, is_restricted: boolean };
+    console.log(`id: ${user_id}  isGuest: ${isGuest}`);
 
     const res = await app.client.conversations.open({
       token: context.botToken,
       users: user_id
     })
-
-    await app.client.chat.postMessage({
-      token: context.botToken,
-      channel: res.channel.id,
-      text: dmMessage(user_id),
-    });
-    await app.client.chat.postMessage({
-      token: context.botToken,
-      channel: postChannelID,
-      text: joinLog(user_id)
-    })
+    if(isGuest === true){
+      // シングルorマルチチャンネルゲスト
+      await app.client.chat.postMessage({
+        token: context.botToken,
+        channel: postChannelID,
+        text: joinLog(user_id)
+      })
+    }
+    if(isGuest === false){
+     await app.client.chat.postMessage({
+       token: context.botToken,
+       channel: postChannelID,
+       text: dmMessage(user_id),
+     });
+    }
   } catch (e) {
     console.error(e);
   }
@@ -92,6 +99,22 @@ app.event('emoji_changed', async ({ event, context }) => {
     console.error(e);
   }
 });
+
+app.event('channel_created', async ({ event, context }) => {
+  try {
+    const { id, creator } = event.channel;
+    const text = `<@${creator}>が<#${id}>を作りました`;
+    console.log(text);
+     await app.client.chat.postMessage({
+      token: context.botToken,
+      channel: channelCreatedNoticeChannelID,
+      text
+    });
+  } catch (e) {
+    console.error(e);
+  }
+});
+
 
 (async () => {
   try {
