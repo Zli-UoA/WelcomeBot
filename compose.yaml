@@ -1,0 +1,13 @@
+services:
+  bot:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    restart: unless-stopped
+
+  tunnel:
+    restart: unless-stopped
+    image: cloudflare/cloudflared:latest
+    command: tunnel run
+    env_file: .env
