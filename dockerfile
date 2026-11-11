@@ -1,7 +1,7 @@
-FROM node:12 as builder
+FROM node:24 as builder
 WORKDIR /node/src/app
 ADD . /node/src/app
-RUN npm i && npm run build
+RUN npm ci && npm run build
 
 FROM node:14
 WORKDIR /node/src/app

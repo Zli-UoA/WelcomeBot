@@ -53,3 +53,7 @@ CloudRun 等に Deploy してください.
 5. `docker run --env-file .env -p 3000:3000 -d zli_bot` を実行します。
 
 環境変数の内容(`.env` の中身)を変更した場合は、再起動してください。
+
+## Build runtime
+
+開発・ビルドには Node 24 を使用し、`npm ci` で固定した依存をインストールしてから `npm run build` を実行します。Dockerの実行ステージはNode 14のままです。
