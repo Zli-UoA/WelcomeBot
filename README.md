@@ -21,10 +21,12 @@ A. slack の無料プランではアプリを入れれる数が制限されて�
 
 ### Develop
 
+- ビルド・開発には Node.js 24 を使用します。esbuild は Node.js 14 向けの `dist/main.js` を生成します。
 - `npm install`
 - `.env` ファイルに下記の環境変数を記入
 - `dm_template.txt` に新規参加者へのメッセージを、`join_log.txt` にnotice_joinに流すログを記入(`username` の部分が新規参加へのメンションになります)
 - `npm run dev` をして `node dist/main.js` を実行
+- `npm test` でビルドと生成されたボットのローカル起動・署名検証を確認できます。Slack API はテスト内で置き換えるため、実際の Slack への接続やメッセージ送信は行いません。
 
 ### Production
 
